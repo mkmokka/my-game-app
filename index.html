@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>My Firebase Multiplayer Game</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin: 20px;
+    }
+    #game-container {
+      width: 800px;
+      height: 600px;
+      background: #eee;
+      margin: 20px auto;
+      border: 2px solid #ccc;
+      position: relative;
+    }
+    select, button {
+      margin: 10px;
+      padding: 5px 10px;
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Welcome to My Firebase Multiplayer Game</h1>
+
+  <!-- Login/Register Section -->
+  <div id="auth-section">
+    <input type="email" id="regEmail" placeholder="Enter email to register" />
+    <button onclick="registerWithEmail()">Register with Email Link</button>
+    <br /><br />
+    <input type="email" id="logEmail" placeholder="Enter email to login" />
+    <input type="password" id="logPass" placeholder="Enter password" />
+    <button onclick="loginWithPassword()">Login</button>
+  </div>
+
+  <!-- Avatar Select & Join Room -->
+  <div id="join-section" style="display:none;">
+    <h2>Select Your Avatar and Join Room</h2>
+    <select id="avatarSelect">
+      <option value="https://randomuser.me/api/portraits/men/10.jpg">Male</option>
+      <option value="https://randomuser.me/api/portraits/women/10.jpg">Female</option>
+    </select>
+    <button onclick="joinRoom('room1', document.getElementById('avatarSelect').value)">Join Room</button>
+  </div>
+
+  <!-- Game Container -->
+  <div id="game-container" style="display:none;">
+    <!-- Phaser or your game canvas goes here -->
+    <p style="position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); color:#888;">
+      Game will load here...
+    </p>
+  </div>
+
+  <script type="module" src="main.js"></script>
+
+  <script>
+    // Show join section only if user logged in
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    const auth = getAuth();
+
+    onAuthStateChanged(auth, user => {
+      if (user) {
+        document.getElementById('auth-section').style.display = 'none';
+        document.getElementById('join-section').style.display = 'block';
+      } else {
+        document.getElementById('auth-section').style.display = 'block';
+        document.getElementById('join-section').style.display = 'none';
+        document.getElementById('game-container').style.display = 'none';
+      }
+    });
+  </script>
+
+</body>
+</html>
